@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.util.Arrays;
 
 class MoveByKeyPanel extends JPanel implements KeyListener{
-    private int x=200, y=200;   //座標
+    private int x=200, y=200;   //主人公の初期座標
     private int xbomb[] = new int[100]; //爆弾のx座標で初期値0
     private int ybomb[] = new int[100]; //爆弾のy座標で初期値0
     private int move = 40;       //移動距離
