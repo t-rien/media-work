@@ -14,6 +14,7 @@ class MoveByKeyPanel extends JPanel implements KeyListener{
 	this.setBackground(Color.white);
 	this.setFocusable(true);
 	this.addKeyListener(this);
+	for(int j = 0; j < 100;j++) xbomb[j] = 1000; //爆弾を見えないところにおいておく
     }
     protected void paintComponent(Graphics g){
 	super.paintComponent(g);
