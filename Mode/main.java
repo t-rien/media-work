@@ -6,18 +6,26 @@ import java.util.Arrays;
 
 class Unit{                                                     //マップのセルのクラス
     public int x, y;
-    public int status =  -100;                                                 //statu = 0:障害物,　 statu = 1:空地, 　statu = 2:死亡エリア（爆弾の余波）, status = 3:　プレイヤー
-    public void getStatus(){
+    public int status =  1;                                                 //statu = 0:障害物（移動不可）,　 statu = 1:空地（移動可能）, 　statu = 2:死亡エリア（爆弾の余波)
+    
+    public void Unit(int x, int y){
+      this.x = x; this.y = y;
+    }
+
+    public int getStatus(){
         return status;
+    }
+    public void setStatus(int s){
+      if(this.status != 0) this.status = s;                               //　壁の状態は変えられない
     }
     public void setXY(int x, int y) {
         this.x = x;
         this.y = y;
     }
-    public void getX() {
+    public int getX() {
         return this.x;
     }
-    public void getY(){
+    public int getY(){
         return this.y;
     }
 }
@@ -34,99 +42,56 @@ class Player extends Unit{
             return 0;
         }
     }
-    public static Player{ 
+    public void Player(){ 
         this.status = 3;
     }
+    public void showStatus(){
+      System.out.println("This play's status:");
+      System.out.println("speed:"+speed+"power:"+power+"bomb_num:"+bomb_num);
+    }
 }
 
-class Boomb extends Player{          // class b = new Bomb(range);
-    int timer;                      //　タイマー、２秒後爆発
+class Boomb extends TimerTask{          // class b = new Bomb(range);
+    //running timer task as daemon thread
+    Timer timer = new Timer(true);
     int range;
-    public static Boomb( ){
-        this.status = 0;            //　爆弾を置くことで障害物になった
-        this.range = power;         //　爆弾の威力を設置(プレイヤーによる)
+    public void Boomb( ){
+        this.range = 2;         //　爆弾の威力を設置(プレイヤーによる)
+        timer.schedule(this, 2000); //explodes in 2 seconds
     }
     
-    private void explode() {        // 爆発したら自己壊滅
-        this.bomb_num++;            // 　プレイヤーの爆弾の持つ数が１回復する
-
+    private void explode(Unit Map[][]) {        // 爆発
+        //this.bomb_num++;                    // 　プレイヤーの爆弾の持つ数が１回復する
+        for(int i=1;i <= range;i++){         //　爆弾の爆発したところは２に塗り替える、プレイヤーがstatus＝２のところで立ったら死亡
+          Map[this.x+i][this.y].setStatus(2);
+          Map[this.x-i][this.y].setStatus(2);
+          Map[this.x][this.y].setStatus(2);
+          Map[this.x][this.y].setStatus(2);
+        }
+        Thread.sleep(500);                    //　爆弾の余波は0.5秒続く
+        for(int i=1;i <= range;i++){          //　爆弾の爆発が終わって、死亡エリア解除
+          Map[this.x+i][this.y].setStatus(1);  
+          Map[this.x-i][this.y].setStatus(1);
+          Map[this.x][this.y].setStatus(1);
+          Map[this.x][this.y].setStatus(1);
+        }
     }
-}
-
-class MoveByKeyPanel extends JPanel implements KeyListener{
-    private int x=200, y=200;                                   //座標
-    private int xbomb[] = new int[100];                         //爆弾のx座標で初期値0
-    private int ybomb[] = new int[100];                         //爆弾のy座標で初期値0
-    private int move = 40;                                      //移動距離
-    private int r = 30;
-    private int i = 0;                                          //爆弾の配列の添字
-    public MoveByKeyPanel(){
-	this.setBackground(Color.white);
-	this.setFocusable(true);
-	this.addKeyListener(this);
-    }
-    protected void paintComponent(Graphics g){
-	super.paintComponent(g);
-	g.setColor(Color.BLUE);                                     //主人公は青色
-	g.fillOval(x, y, r, r);
-	g.setColor(Color.RED); //爆弾は赤色
-	for(int j = 0;j <100;j++){  
-	    g.fillOval(xbomb[j], ybomb[j], r, r);
-	}                        //爆弾を１００個まで生成
-   }
-   public void keyPressed(KeyEvent e){
-      int k = e.getKeyCode();
-      switch(k){
-        case KeyEvent.VK_RIGHT:
-          x = x+move; 
-          break;
-        case KeyEvent.VK_LEFT:
-          x = x-move; 
-          break;
-        case KeyEvent.VK_DOWN:
-          y = y+move;
-          break;
-        case KeyEvent.VK_UP:
-          y = y-move; 
-          break;
-        case KeyEvent.VK_SPACE: //爆弾を置く
-	    xbomb[i] = x;
-	    ybomb[i] = y;
-	    i++;
-	  break;
-      }
-      repaint();
-   }
-   public void keyTyped(KeyEvent e){ 
-     char c = e.getKeyChar();
-     switch(c){
-       case 'f':
-         x = x+move; 
-         break;
-       case 'b':
-         x = x-move; 
-         break;
-       case 'd':
-         y = y+move;
-         break;
-       case 'u':
-         y = y-move; 
-         break;
-     }
-     repaint();
-   }
-   public void keyReleased(KeyEvent e){ }
-}
-
-class MoveByKeyFrame extends JFrame {
-  public MoveByKeyFrame(){
-    this.setTitle("MoveByKey Frame");
-    this.setSize(500,500);
-    this.add(new MoveByKeyPanel());
-    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    this.setVisible(true);
+    public void run() {
+      explode();
   }
+}
+
+class main {
+  //Timer timer = new Timer();
+  //timer.schedule(this, 2000);
   public static void main(String argv[]) {
-    new MoveByKeyFrame();
- }
+    Unit[][] Map = new Unit[100][100];
+    for(int i=0;i<100;i++){
+      for(int j=0;j<100;j++){
+        Map[i][j] = new Unit();
+        Map[i][j].setXY(i, j);
+      }
+    }
+    System.out.println(Map[50][70].getX());
+  }
 }
