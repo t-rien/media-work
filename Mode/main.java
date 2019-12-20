@@ -76,6 +76,7 @@ class Boomb extends TimerTask{
       map[this.x][this.y].setStatus(2);
     }
     //need repaint ?
+    //　死亡判定
     try {
       Thread.sleep(500);                 //　爆弾の余波は0.5秒続く
     } catch (InterruptedException e) {
@@ -92,13 +93,20 @@ class Boomb extends TimerTask{
 
 class main {
   public static void main(String argv[]) {
-    Unit[][] map = new Unit[100][100];
-    for(int i=0;i<100;i++){
-      for(int j=0;j<100;j++){
+    Unit[][] map = new Unit[25][25];
+    for(int i=0;i<25;i++){
+      for(int j=0;j<25;j++){
         map[i][j] = new Unit();
         map[i][j].setXY(i, j);
       }
     }
+    for(int i=0;i<25;i++){                  //　マップの外側を壁にする　 status = 0
+      map[0][i].setStatus(0);               
+      map[i][0].setStatus(0);
+    }
+    // if(map[x+1][y].getStatus != 0){        // 壁でなければ、移動できる。 
+    //    move                              
+    // }
     Boomb boomb = new Boomb(map, 50, 70);
     System.out.println(map[50][70].getX());
   }
