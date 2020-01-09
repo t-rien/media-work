@@ -10,7 +10,7 @@ class MoveByKeyPanel extends JPanel implements KeyListener{
     private int move = 40;       //移動距離
     private int r = 30;
     private int i = 0;           //爆弾の配列の添字
-    private int count = 0;
+    private int count = 0;       //キーを押した回数
     public MoveByKeyPanel(){
 	this.setBackground(Color.white);
 	this.setFocusable(true);
@@ -30,8 +30,8 @@ class MoveByKeyPanel extends JPanel implements KeyListener{
       int k = e.getKeyCode();
       switch(k){
         case KeyEvent.VK_RIGHT:
-	  count++;
-	  if(count%5 == 1)
+	  count++;                      //キーを押した回数を１増やす
+	  if(count%5 == 1)              //長押ししたときにゆっくり動く
             x = x+move; 
           break;
         case KeyEvent.VK_LEFT:
@@ -61,7 +61,7 @@ class MoveByKeyPanel extends JPanel implements KeyListener{
    public void keyReleased(KeyEvent e){
     switch(k){
        case KeyEvent.VK_RIGHT:
-	   count = 0;
+	   count = 0;                         //長押しを止めたときにキーを押した回数を０に戻す
           break;
         case KeyEvent.VK_LEFT:
 	    count = 0;	    
