@@ -10,6 +10,7 @@ class MoveByKeyPanel extends JPanel implements KeyListener{
     private int move = 40;       //移動距離
     private int r = 30;
     private int i = 0;           //爆弾の配列の添字
+    private int count = 0;
     public MoveByKeyPanel(){
 	this.setBackground(Color.white);
 	this.setFocusable(true);
@@ -29,16 +30,24 @@ class MoveByKeyPanel extends JPanel implements KeyListener{
       int k = e.getKeyCode();
       switch(k){
         case KeyEvent.VK_RIGHT:
-          x = x+move; 
+	  count++;
+	  if(count%5 == 1)
+            x = x+move; 
           break;
         case KeyEvent.VK_LEFT:
-          x = x-move; 
+	  count++;
+	  if(count%5 == 1)
+            x = x-move; 
           break;
         case KeyEvent.VK_DOWN:
-          y = y+move;
+	  count++;
+	  if(count%5 == 1)
+            y = y+move;
           break;
         case KeyEvent.VK_UP:
-          y = y-move; 
+	  count++;
+	  if(count%5 == 1)
+            y = y-move; 
           break;
         case KeyEvent.VK_SPACE: //爆弾を置く
 	    xbomb[i] = x;
@@ -48,25 +57,24 @@ class MoveByKeyPanel extends JPanel implements KeyListener{
       }
       repaint();
    }
-   public void keyTyped(KeyEvent e){ 
-     char c = e.getKeyChar();
-     switch(c){
-       case 'f':
-         x = x+move; 
-         break;
-       case 'b':
-         x = x-move; 
-         break;
-       case 'd':
-         y = y+move;
-         break;
-       case 'u':
-         y = y-move; 
-         break;
-     }
-     repaint();
-   }
-   public void keyReleased(KeyEvent e){ }
+   public void keyTyped(KeyEvent e){}
+   public void keyReleased(KeyEvent e){
+    switch(k){
+       case KeyEvent.VK_RIGHT:
+	   count = 0;
+          break;
+        case KeyEvent.VK_LEFT:
+	    count = 0;	    
+          break;
+        case KeyEvent.VK_DOWN:
+	    count = 0;	    
+          break;
+        case KeyEvent.VK_UP:
+	    count = 0;	    
+          break;
+      }
+      repaint();
+    }
 }
 
 class MoveByKeyFrame extends JFrame {
