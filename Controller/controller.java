@@ -78,25 +78,25 @@ class SubPanel extends JPanel implements KeyListener {
 	  count++;
 	  if(count%5 == 1)
             px = px+move;
-	  walkr = new ImageIcon("walkr.jpg");
+	  walkr = new ImageIcon("./walkr.jpg");
           break;
         case KeyEvent.VK_LEFT:
 	  count++;
 	  if(count%5 == 1)
             px = px-move;
-	  walkl = new ImageIcon("walkl.jpg");
+	  walkl = new ImageIcon("./walkl.jpg");
           break;
         case KeyEvent.VK_DOWN:
 	  count++;
 	  if(count%5 == 1)
             py = py+move;
-	  walkd = new ImageIcon("walkd.jpg");
+	  walkd = new ImageIcon("./walkd.jpg");
           break;
         case KeyEvent.VK_UP:
 	  count++;
 	  if(count%5 == 1)
             py = py-move;
-	  walku = new ImageIcon("walku.jpg");
+	  walku = new ImageIcon("./walku.jpg");
           break;
         case KeyEvent.VK_SPACE: //爆弾を置く
 	  bx = px;
@@ -111,19 +111,19 @@ class SubPanel extends JPanel implements KeyListener {
     switch(k){
        case KeyEvent.VK_RIGHT:
 	   count = 0;
-	   stop = new ImageIcon("stop.jpg");
+	   stop = new ImageIcon("./stop.jpg");
           break;
         case KeyEvent.VK_LEFT:
 	    count = 0;
-	    stop = new ImageIcon("stop.jpg");
+	    stop = new ImageIcon("./stop.jpg");
           break;
         case KeyEvent.VK_DOWN:
 	    count = 0;
-	    stop = new ImageIcon("stop.jpg");
+	    stop = new ImageIcon("./stop.jpg");
           break;
         case KeyEvent.VK_UP:
 	    count = 0;
-	    stop = new ImageIcon("stop.jpg");
+	    stop = new ImageIcon("./stop.jpg");
           break;
       }
       repaint();
