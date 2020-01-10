@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 class Unit{                                                     //マップのセルのクラス
     public int x, y;
-    public int status =  1;                                                 //statu = 0:障害物（移動不可）,　 statu = 1:空地（移動可能）, 　statu = 2:死亡エリア（爆弾の余波)
+    public int status =  1;                                                 //statu = 0:障害物（移動不可）,　 statu = 1:空地（移動可能）, status = 2:死亡エリア（爆弾の余波)
     //ImageIcon img;
     public void Unit(int x, int y){
       this.x = x; this.y = y;
@@ -51,6 +51,9 @@ class Player extends Unit{
       System.out.println("This play's status:");
       System.out.println("speed:"+speed+"power:"+power+"bomb_num:"+bomb_num);
     }
+    public void move(Unit destin){            // destin:　移動先
+      
+    }
 }
 
 class Boomb extends TimerTask{
@@ -62,9 +65,22 @@ class Boomb extends TimerTask{
   public Boomb(Unit[][] map, int x, int y){            // give coordinate when set a bomb
     this.range = 2;         //　爆弾の威力を設置(プレイヤーによる)
     this.map = map;
+    System.out.println("Set Bomb at:" + x + "," + y);
     this.x = x; this.y = y;
     timer = new java.util.Timer(true);
     timer.schedule(this, 2000);
+    try {
+      Thread.sleep(2600);                 //　爆弾の余波は0.5秒続く
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    System.out.println("After exploding");
+    for(int i=0;i<25;i++){
+      for(int j=0;j<25;j++){
+        System.out.print(map[i][j].getStatus()+" ");
+      }
+      System.out.println("");
+    }
   }
 
   public void run() {                     // explode
@@ -72,8 +88,15 @@ class Boomb extends TimerTask{
     for(int i=1;i <= range;i++){          //　爆弾の爆発したところは２に塗り替える、プレイヤーがstatus＝２のところで立ったら死亡
       map[this.x+i][this.y].setStatus(2);
       map[this.x-i][this.y].setStatus(2);
-      map[this.x][this.y].setStatus(2);
-      map[this.x][this.y].setStatus(2);
+      map[this.x][this.y+i].setStatus(2);
+      map[this.x][this.y-i].setStatus(2);
+    }
+    System.out.println("Start exploding");
+    for(int i=0;i<25;i++){
+      for(int j=0;j<25;j++){
+        System.out.print(map[i][j].getStatus()+" ");
+      }
+      System.out.println("");
     }
     //need repaint ?
     //　死亡判定
@@ -85,15 +108,14 @@ class Boomb extends TimerTask{
     for(int i=1;i <= range;i++){          //　爆弾の爆発が終わって、死亡エリア解除
       map[this.x+i][this.y].setStatus(1);  
       map[this.x-i][this.y].setStatus(1);
-      map[this.x][this.y].setStatus(1);
-      map[this.x][this.y].setStatus(1);
+      map[this.x][this.y+i].setStatus(1);
+      map[this.x][this.y-i].setStatus(1);
     }
   }
 }
 
 class main {
-  public static void main(String argv[]) {
-    Unit[][] map = new Unit[25][25];
+  public static void setMap(Unit[][] map){
     for(int i=0;i<25;i++){
       for(int j=0;j<25;j++){
         map[i][j] = new Unit();
@@ -101,13 +123,24 @@ class main {
       }
     }
     for(int i=0;i<25;i++){                  //　マップの外側を壁にする　 status = 0
-      map[0][i].setStatus(0);               
+      map[0][i].setStatus(0);
+      map[24][i].setStatus(0);              
       map[i][0].setStatus(0);
+      map[i][24].setStatus(0);
     }
+  }
+
+  public static void createModel(){
+    Unit[][] map = new Unit[25][25];
+    setMap(map);                               //　マップを生成する、枠が壁
     // if(map[x+1][y].getStatus != 0){        // 壁でなければ、移動できる。 
     //    move                              
     // }
-    Boomb boomb = new Boomb(map, 50, 70);
-    System.out.println(map[50][70].getX());
+    Boomb boomb = new Boomb(map, 10, 10);
+  }
+  public static void main(String argv[]) {
+    createModel();
   }
 }
+
+
