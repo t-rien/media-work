@@ -35,8 +35,8 @@ class SubPanel extends JPanel implements KeyListener {
     //private Player p; //use this if model completes
     //private Boomb b; // same as comment above
     private MainPanel mp;
-    private ImageIcon picon, bicon;
-    private ImageIcon walkl, walkr, walku, walkd, stop;
+    private ImageIcon bicon,
+    public ImageIcon picon;           //変更
     private int px, py, bx, by, move; //insted of x, y, speed in Player p.
     private boolean bflag;
     private int count = 0;
@@ -48,7 +48,7 @@ class SubPanel extends JPanel implements KeyListener {
 	px = 10;
 	py = 10;
 	move = 100;
-	picon = new ImageIcon("./circle_s.jpg");
+	picon = new ImageIcon("./stop.jpg");     //変更
 	bicon = new ImageIcon("./bakudan.png");
 	setLayout(null); // deactivate layout manager
 	setBackground(Color.white);
@@ -71,32 +71,32 @@ class SubPanel extends JPanel implements KeyListener {
 	}                            // produce 10x10 squares
     }
 
-   public void keyPressed(KeyEvent e){
+   public void keyPressed(KeyEvent e){       //↓変更
       int k = e.getKeyCode();
       switch(k){
         case KeyEvent.VK_RIGHT:
-	  count++;
+	  count++;              //キーを押すたびにcountを増やして、長押ししたときにはゆっくり動く
 	  if(count%5 == 1)
             px = px+move;
-	  walkr = new ImageIcon("./walkr.jpg");
+	  picon = new ImageIcon("./walkr.jpg");
           break;
         case KeyEvent.VK_LEFT:
 	  count++;
 	  if(count%5 == 1)
             px = px-move;
-	  walkl = new ImageIcon("./walkl.jpg");
+	  picon = new ImageIcon("./walkl.jpg");
           break;
         case KeyEvent.VK_DOWN:
 	  count++;
 	  if(count%5 == 1)
             py = py+move;
-	  walkd = new ImageIcon("./walkd.jpg");
+	  picon = new ImageIcon("./walkd.jpg");
           break;
         case KeyEvent.VK_UP:
 	  count++;
 	  if(count%5 == 1)
             py = py-move;
-	  walku = new ImageIcon("./walku.jpg");
+	  picon = new ImageIcon("./walku.jpg");
           break;
         case KeyEvent.VK_SPACE: //爆弾を置く
 	  bx = px;
@@ -106,24 +106,24 @@ class SubPanel extends JPanel implements KeyListener {
       repaint();
    }
    public void keyTyped(KeyEvent e){}
-   public void keyReleased(KeyEvent e){
+   public void keyReleased(KeyEvent e){    
        int k = e.getKeyCode();   
     switch(k){
        case KeyEvent.VK_RIGHT:
-	   count = 0;
-	   stop = new ImageIcon("./stop.jpg");
+	   count = 0;         //キーを離したらcountが0になる
+	   picon = new ImageIcon("./stop.jpg");  //アイコンを戻す
           break;
         case KeyEvent.VK_LEFT:
 	    count = 0;
-	    stop = new ImageIcon("./stop.jpg");
+	    picon = new ImageIcon("./stop.jpg");
           break;
         case KeyEvent.VK_DOWN:
 	    count = 0;
-	    stop = new ImageIcon("./stop.jpg");
+	    picon = new ImageIcon("./stop.jpg");
           break;
         case KeyEvent.VK_UP:
 	    count = 0;
-	    stop = new ImageIcon("./stop.jpg");
+	    picon = new ImageIcon("./stop.jpg");
           break;
       }
       repaint();
