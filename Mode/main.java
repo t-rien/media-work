@@ -7,8 +7,8 @@ import java.util.Arrays;
 
 class Unit{                                                     //マップのセルのクラス
     public int x, y;
-    public int status =  1;                                                 //statu = 0:障害物（移動不可）,　 statu = 1:空地（移動可能）, status = 2:死亡エリア（爆弾の余波)
-    //ImageIcon img;
+    public int status =  1;                                                 //0:障害物（移動不可）,　1:空地（移動可能）, 2:死亡エリア（爆弾の余波), 3:　
+    //ImageIcon img;                                              
     public void Unit(int x, int y){
       this.x = x; this.y = y;
     }
@@ -86,10 +86,18 @@ class Boomb extends TimerTask{
   public void run() {                     // explode
     //this.bomb_num++;                    // 　プレイヤーの爆弾の持つ数が１回復する
     for(int i=1;i <= range;i++){          //　爆弾の爆発したところは２に塗り替える、プレイヤーがstatus＝２のところで立ったら死亡
-      map[this.x+i][this.y].setStatus(2);
-      map[this.x-i][this.y].setStatus(2);
-      map[this.x][this.y+i].setStatus(2);
-      map[this.x][this.y-i].setStatus(2);
+      if(this.x-i < 25){
+        map[this.x+i][this.y].setStatus(2);
+      }
+      if(this.x-i >= 0){
+        map[this.x-i][this.y].setStatus(2);
+      }
+      if(this.y+i < 25){
+        map[this.x][this.y+i].setStatus(2);
+      }
+      if(this.y-i >= 0){
+        map[this.x][this.y-i].setStatus(2);
+      }
     }
     System.out.println("Start exploding");
     for(int i=0;i<25;i++){
@@ -98,8 +106,10 @@ class Boomb extends TimerTask{
       }
       System.out.println("");
     }
-    //need repaint ?
-    //　死亡判定
+    //　need repaint ?
+    //　ここで一度死亡判定
+    //　 bomb man　の座標を取って、もしその座標の statusが２、
+     //　つまり爆弾の余波にいたら、死亡判定する。Viewで Game Overを表示する？
     try {
       Thread.sleep(500);                 //　爆弾の余波は0.5秒続く
     } catch (InterruptedException e) {
@@ -136,11 +146,10 @@ class main {
     // if(map[x+1][y].getStatus != 0){        // 壁でなければ、移動できる。 
     //    move                              
     // }
-    Boomb boomb = new Boomb(map, 10, 10);
+    Boomb boomb = new Boomb(map, 1, 1);
   }
   public static void main(String argv[]) {
     createModel();
   }
 }
-
 
