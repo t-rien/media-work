@@ -128,4 +128,4 @@ class SubPanel extends JPanel implements KeyListener {
       }
       repaint();
     }
-}
+} 
