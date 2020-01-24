@@ -73,9 +73,16 @@ class Player extends Unit{
       System.out.println("This play's status:");
       System.out.println("speed:"+speed+"power:"+power+"bomb_num:"+bomb_num);
     }
-    public void move(){            // destin:　移動先
-      
+    public boolean move(int dest_x, int dest_y, Unit[][] map){            // destin:　移動先
+      if(map[dest_x][dest_y].getStatus() != 0){
+        this.x = dest_x;
+        this.y = dest_y;
+        return true;
+      }else{
+        return false;
+      }
     }
+    
     public void addRange(){            // destin:　移動先
       this.power++;
     }
