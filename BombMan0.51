@@ -153,9 +153,9 @@ class SubPanel extends JPanel implements KeyListener {
             g.drawImage(exwave.getImage(), i*100, j*100, this);
         else if(map[i][j].getStatus() == 8+1) // 空地+プレイヤー
             g.drawImage(picon.getImage(), i*100, j*100, this);
-        else if(map[i][j].getStatus() == 16) // bomb
+        else if(map[i][j].getStatus() == 16+1) // bomb+space
             g.drawImage(bicon.getImage(), i*100, j*100, this);
-        else if(map[i][j].getStatus() == 16+8){ // bomb + player
+        else if(map[i][j].getStatus() == 16+8+1){ // bomb + player+space
             g.drawImage(bicon.getImage(), i*100, j*100, this);
             g.drawImage(picon.getImage(), i*100, j*100, this);
         }
