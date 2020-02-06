@@ -1,6 +1,6 @@
 /*
     145 156行目に画面遷移のコードを追加
-    
+
     addStatusを追加し、元のステータスを変更する方式の他、ステータスを「重ねる」という方式を追加した。
     ex:プレイヤーがUnit[1][1]からUnit[2][1]に移動するときに、Unit[1][1]から自分のステータス8を引いて(9->1)、
     Unit[2][1]のステータスに自分のステータス8を重ねる(1->9)
@@ -153,6 +153,7 @@ class SubPanel extends JPanel implements KeyListener {
                 g.drawImage(micon.getImage(), i*75, j*75, this);
                 g.drawImage(exwave.getImage(), i*75, j*75, this);
                 num_of_mon--;
+                mon.killed();
                 if(num_of_mon == 0){                                   //　モンスター全部死んだら勝ち
                     System.out.println("You win!\n");
                     //ここで勝ちの画面遷移
@@ -360,7 +361,12 @@ class Monster extends Unit implements ActionListener{
           this.x = dest_x;
           this.y = dest_y;
       }
-    }
+}
+public void killed(){
+    timer.stop();
+    map[this.x][this.y].addStatus(-this.status);
+    this.status = 0;
+}
 
     public void actionPerformed(ActionEvent e) {
         double r = Math.random();
